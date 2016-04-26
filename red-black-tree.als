@@ -17,7 +17,7 @@ fact btree {
 		-- no cycles
 		n not in n.^(left + right)
 		-- at most one parent for each node
-		//lone n.~(left + right)
+		lone n.~(left + right)
 	}
 	-- distincti children
 	no left & right
@@ -32,8 +32,8 @@ fact orderedTree {
 
 fact redNodeHasTwoBlackChildren {
 	all n: Node | {
-		n.color = RED and some n.left => n.left.color = BLACK
-		n.color = RED and some n.right => n.right.color = BLACK
+		(n.color = RED and some n.left) => n.left.color = BLACK
+		(n.color = RED and some n.right) => n.right.color = BLACK
 	}
 }
 
