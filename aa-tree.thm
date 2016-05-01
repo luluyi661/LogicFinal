@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<alloy>
+
+<view>
+
+<defaultnode/>
+
+<defaultedge/>
+
+<node>
+   <type name="Data"/>
+   <type name="Int"/>
+   <type name="Node"/>
+   <type name="String"/>
+   <type name="univ"/>
+   <type name="ordering/Ord"/>
+   <type name="seq/Int"/>
+   <set name="$binaryTree_n&apos;" type="Node"/>
+</node>
+
+<edge visible="no" attribute="yes">
+   <relation name="level"> <type name="Node"/> <type name="Int"/> </relation>
+   <relation name="value"> <type name="Node"/> <type name="Data"/> </relation>
+</edge>
+
+</view>
+
+</alloy>
