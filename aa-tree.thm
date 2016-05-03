@@ -10,17 +10,21 @@
 <node>
    <type name="Data"/>
    <type name="Int"/>
+   <type name="Leaf"/>
    <type name="Node"/>
    <type name="String"/>
+   <type name="ThreeNode"/>
+   <type name="TwoNode"/>
    <type name="univ"/>
    <type name="ordering/Ord"/>
    <type name="seq/Int"/>
-   <set name="$binaryTree_n&apos;" type="Node"/>
+   <set name="$is23Tree_n" type="Node"/>
 </node>
 
 <edge visible="no" attribute="yes">
-   <relation name="level"> <type name="Node"/> <type name="Int"/> </relation>
-   <relation name="value"> <type name="Node"/> <type name="Data"/> </relation>
+   <relation name="a"> <type name="ThreeNode"/> <type name="Data"/> </relation>
+   <relation name="a"> <type name="TwoNode"/> <type name="Data"/> </relation>
+   <relation name="b"> <type name="ThreeNode"/> <type name="Data"/> </relation>
 </edge>
 
 </view>

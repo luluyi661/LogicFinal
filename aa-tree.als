@@ -8,7 +8,7 @@ sig Node {
 	right: lone Node,
 	value: Data
 } {
-	some left => left != right
+	no left & right
 
 	lone parent: Node | this in parent.(@left + @right)
 }
@@ -39,7 +39,7 @@ fact rightGrandchildLevelLess {
 }
 
 fact nonLeavesHaveChildren {
-	all n: Node | {
+	all n: Node | {nonLeavesHaveChildren
 		n.level > 1 => some n.left and some n.right
 	}
 }
