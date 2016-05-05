@@ -2,82 +2,83 @@ open util/ordering [Data]
 
 sig Data {}
 
-abstract sig Node {}
+abstract sig Node {} {
+	--lone parent: Node | this in parent.(TwoNode <: left + ThreeNode <: left + TwoNode <: right + ThreeNode <: right + middle)
+}
+
+fact onlyOneParent {
+	/*
+	no n: Node | {
+		some disj p1, p2: Node | {
+			p1 -> n in TwoNode <: left + ThreeNode <: left + TwoNode <: right + ThreeNode <: right + middle
+			p2 -> n in TwoNode <: left + ThreeNode <: left + TwoNode <: right + ThreeNode <: right + middle
+		}
+	}
+	*/
+	all n: Node | {
+		lone n.~(TwoNode <: left + ThreeNode <: left + TwoNode <: right + ThreeNode <: right + middle)
+	}
+}
 
 sig TwoNode extends Node {
 	a: Data,
-	left2: Node,
-	right2: Node
+	left: Node,
+	right: Node
 } {
-	/*
-	all n: contents[left] | {
-		a.gt[data[n]]
-	}
-
-	all n: contents[right] | {
-		a.lte[data[n]]
-	}
-	*/
-
+	no left & right
+	
 	-- TODO: same height
 }
 
 sig ThreeNode extends Node {
 	a: Data,
 	b: Data,
-	left3: Node,
-	right3: Node,
-	middle3: Node
+	left: Node,
+	right: Node,
+	middle: Node
 } {
+	no left & right
+	no left & middle
+	no right & middle
+
 	-- TODO: same height
-
-	/*
-	all n: contents[left] | {
-		a.gt[data[n]]
-	}
-
-	all n: contents[middle] | {
-		a.lte[data[n]]
-		b.gt[data[n]]
-	}
-
-	all n: contents[right] | {
-		b.lte[data[n]]
-	}
-	*/
 }
 
 fact noSelfLoops {
-	no iden & left2
-	no iden & right2
-	no iden & left3
-	no iden & right3
-	no iden & middle3
+	no iden & TwoNode <: left
+	no iden & ThreeNode <: left
+	no iden & TwoNode <: right
+	no iden & ThreeNode <: right
+	no iden & middle
 }
 
 sig Leaf extends Node {}
 
+pred isValid2Node[n: TwoNode] {
+	is23Tree[n.left]
+	is23Tree[n.right]
+	all e: elements[n.left] | n.a.gt[e]
+	all e: elements[n.right] | n.a.lte[e]
+}
+
+pred isValid3Node[n: ThreeNode] {
+	is23Tree[n.left]
+	is23Tree[n.right]
+	is23Tree[n.middle]
+
+	all e: elements[n.left] | n.a.gt[e]
+	all e: elements[n.middle] | n.a.lte[e] and n.b.gt[e]
+	all e: elements[n.right] | n.b.lte[e]
+}
+
 pred is23Tree[n: Node] {
-	n in TwoNode => {
-		is23Tree[n.left2]
-		is23Tree[n.right2]
-		all e: elements[n.left2] | n.(TwoNode <: a).gt[e]
-		all e: elements[n.right2] | n.(TwoNode <: a).lte[e]
-	}
+	n in TwoNode => isValid2Node[n]
 	
-	n in ThreeNode => {
-		is23Tree[n.left3]
-		is23Tree[n.right3]
-		is23Tree[n.middle3]
-		
-		all e: elements[n.left3] | n.(ThreeNode <: a).gt[e]
-		all e: elements[n.middle3] | n.(ThreeNode <: a).lte[e] and n.b.gt[e]
-		all e: elements[n.right3] | n.b.lte[e]
-	}
+	n in ThreeNode => isValid3Node[n]
 }
 
 fun contents[n: Node] : set Node {
-	n + n.^left2 + n.^left3 + n.^right2 + n.^right3 + n.^middle3
+	n + n.^(TwoNode <: left) + n.^(ThreeNode <: left) + n.^(TwoNode <: right) + n.^(ThreeNode <: right) + n.^middle
 }
 
 fun elements[n: Node] : set Data {
@@ -90,4 +91,16 @@ fun data[n: Node] : set Data {
 	n.(TwoNode <: a) + n.(ThreeNode <: a) + n.b
 }
 
-run is23Tree for 5
+fact connected {
+	some n: Node | Node in contents[n]
+}
+
+pred interesting {
+	some TwoNode
+	some ThreeNode
+}
+
+run {
+	some n: Node | is23Tree[n]
+	interesting
+} for 10 but 3 int

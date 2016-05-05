@@ -14,6 +14,8 @@ sig TwoThreeNode extends Node {
 	no left & middle
 	no right & middle
 
+	a != b
+
 	-- 3-nodes have 2 values
 	some middle iff some b
 
@@ -85,4 +87,4 @@ run {
 	some n: TwoThreeNode | n.isExternal
 	some n: TwoThreeNode | n.isTwoNode
 	some n: TwoThreeNode | n.isThreeNode
-} for 15 but 5 int
+} for 9 but 3 int
