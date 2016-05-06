@@ -62,18 +62,6 @@ pred TwoThreeNode.isInternal {
 	this.(left + right + middle) in TwoThreeNode
 }
 
-fun TwoThreeNode.leaves : set Leaf {
-	this.^(left + right + middle) & Leaf
-}
-
-fun TwoThreeNode.height[l: Leaf] : Int {
-	#{n: this.*(@left + @right + @middle) | l in n.^(@left + @right + @middle)}
-}
-
-fun TwoThreeNode.height : Int {
-	max[1]
-}
-
 fact acyclic {
 	no iden & ^(left + right + middle)
 }
