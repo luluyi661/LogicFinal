@@ -1,3 +1,5 @@
+module two_three_tree
+
 abstract sig Node {} {
 	-- at most one parent
 	lone this.~(left + right + middle)
@@ -13,6 +15,8 @@ sig TwoThreeNode extends Node {
 	no left & right
 	no left & middle
 	no right & middle
+
+	a != b
 
 	-- 3-nodes have 2 values
 	some middle iff some b
@@ -60,18 +64,6 @@ pred TwoThreeNode.isInternal {
 	this.(left + right + middle) in TwoThreeNode
 }
 
-fun TwoThreeNode.leaves : set Leaf {
-	this.^(left + right + middle) & Leaf
-}
-
-fun TwoThreeNode.height[l: Leaf] : Int {
-	#{n: this.*(@left + @right + @middle) | l in n.^(@left + @right + @middle)}
-}
-
-fun TwoThreeNode.height : Int {
-	max[1]
-}
-
 fact acyclic {
 	no iden & ^(left + right + middle)
 }
@@ -80,9 +72,13 @@ fact connected {
 	some root: Node | Node in root.*(left + right + middle)
 }
 
+fun tree_root: Node {
+	{r: Node | Node in r.*(left + right + middle)}
+}
+
 run {
 	some n: TwoThreeNode | n.isInternal
 	some n: TwoThreeNode | n.isExternal
 	some n: TwoThreeNode | n.isTwoNode
 	some n: TwoThreeNode | n.isThreeNode
-} for 15 but 5 int
+} for 9 but 3 int

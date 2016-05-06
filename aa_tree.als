@@ -1,12 +1,17 @@
-open util/ordering [Data]
+module aa_tree
 
-sig Data {}
+open util/integer
+
+--open util/ordering [Data]
+
+--sig Data {}
 
 sig Node {
 	level: Int,
 	left: lone Node,
 	right: lone Node,
-	value: Data
+	--value: Data
+	value: Int
 } {
 	no left & right
 
@@ -39,13 +44,17 @@ fact rightGrandchildLevelLess {
 }
 
 fact nonLeavesHaveChildren {
-	all n: Node | {nonLeavesHaveChildren
+	all n: Node | {
 		n.level > 1 => some n.left and some n.right
 	}
 }
 
 fact someRoot {
 	some n: Node | Node in n + n.^(left + right)
+}
+
+fun tree_root: Node {
+	{r: Node | Node in r.*(left + right)}
 }
 
 pred binaryTree[n: Node] {
@@ -56,7 +65,7 @@ pred binaryTree[n: Node] {
 pred interesting {
 	some n: Node | n.level > 2
 	some n: Node | n.level = n.right.level
-	all d: Data | lone n: Node | n.value = d
+	--all d: Data | lone n: Node | n.value = d
 }
 
 run {
