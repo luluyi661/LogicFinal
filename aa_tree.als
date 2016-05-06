@@ -1,14 +1,17 @@
 module aa_tree
 
-open util/ordering [Data]
+open util/integer
 
-sig Data {}
+--open util/ordering [Data]
+
+--sig Data {}
 
 sig Node {
 	level: Int,
 	left: lone Node,
 	right: lone Node,
-	value: Data
+	--value: Data
+	value: Int
 } {
 	no left & right
 
@@ -50,6 +53,10 @@ fact someRoot {
 	some n: Node | Node in n + n.^(left + right)
 }
 
+fun tree_root: Node {
+	{r: Node | Node in r.*(left + right)}
+}
+
 pred binaryTree[n: Node] {
 	all e: n.^left.value | n.value.gt[e]
 	all e: n.^right.value | n.value.lte[e]
@@ -58,7 +65,7 @@ pred binaryTree[n: Node] {
 pred interesting {
 	some n: Node | n.level > 2
 	some n: Node | n.level = n.right.level
-	all d: Data | lone n: Node | n.value = d
+	--all d: Data | lone n: Node | n.value = d
 }
 
 run {

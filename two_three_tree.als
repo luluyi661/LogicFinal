@@ -1,3 +1,5 @@
+module two_three_tree
+
 abstract sig Node {} {
 	-- at most one parent
 	lone this.~(left + right + middle)
@@ -68,6 +70,10 @@ fact acyclic {
 
 fact connected {
 	some root: Node | Node in root.*(left + right + middle)
+}
+
+fun tree_root: Node {
+	{r: Node | Node in r.*(left + right + middle)}
 }
 
 run {
