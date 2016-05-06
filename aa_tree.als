@@ -1,3 +1,5 @@
+module aa_tree
+
 open util/ordering [Data]
 
 sig Data {}
@@ -39,7 +41,7 @@ fact rightGrandchildLevelLess {
 }
 
 fact nonLeavesHaveChildren {
-	all n: Node | {nonLeavesHaveChildren
+	all n: Node | {
 		n.level > 1 => some n.left and some n.right
 	}
 }
