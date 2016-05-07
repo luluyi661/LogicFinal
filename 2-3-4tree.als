@@ -69,6 +69,7 @@ fact leavesSameDepth {
 }
 
 pred show {
+	#Node = 3
 }
 
-run show for 10
+run show
