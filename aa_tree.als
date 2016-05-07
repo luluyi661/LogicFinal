@@ -62,6 +62,10 @@ pred binaryTree[n: Node] {
 	all e: n.^right.value | n.value.lte[e]
 }
 
+fact allBinaryTrees {
+	all n: Node | binaryTree[n]
+}
+
 pred interesting {
 	some n: Node | n.level > 2
 	some n: Node | n.level = n.right.level

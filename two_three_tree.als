@@ -8,8 +8,8 @@ abstract sig Node {} {
 sig TwoThreeNode extends Node {
 	a: Int,
 	b: lone Int,
-	left: Node,
-	right: Node,
+	left: lone Node,
+	right: lone Node,
 	middle: lone Node
 } {
 	no left & right
@@ -18,11 +18,15 @@ sig TwoThreeNode extends Node {
 
 	a != b
 
+	some left iff some right
+
 	-- 3-nodes have 2 values
 	some middle iff some b
 
+	some middle => some left
+
 	-- Internal nodes (nodes with children) only have non-leaf children
-	left in Leaf iff right in Leaf
+	--left in Leaf iff right in Leaf
 	middle in TwoThreeNode => left in TwoThreeNode and right in TwoThreeNode -- can't use iff since middle can be none
 
 	-- Left and right (and middle) are of the same height
@@ -46,7 +50,7 @@ sig TwoThreeNode extends Node {
 
 }
 
-sig Leaf extends Node {}
+--sig Leaf extends Node {}
 
 pred TwoThreeNode.isTwoNode {
 	no this.middle
@@ -57,7 +61,7 @@ pred TwoThreeNode.isThreeNode {
 }
 
 pred TwoThreeNode.isExternal {
-	this.(left + right + middle) in Leaf
+	no this.(left + right + middle)-- in Leaf
 }
 
 pred TwoThreeNode.isInternal {
