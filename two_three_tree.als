@@ -1,8 +1,10 @@
 module two_three_tree
 
-abstract sig Node {} {
+abstract sig Node {
+	parent: lone Node
+} {
 	-- at most one parent
-	lone this.~(left + right + middle)
+	parent = this.~(left + right + middle)
 }
 
 sig TwoThreeNode extends Node {
@@ -73,11 +75,11 @@ fact acyclic {
 }
 
 fact connected {
-	some root: Node | Node in root.*(left + right + middle)
+	one root: Node | no root.parent
 }
 
 fun tree_root: Node {
-	{r: Node | Node in r.*(left + right + middle)}
+	{r: Node | no r.parent}
 }
 
 run {

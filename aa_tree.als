@@ -2,20 +2,16 @@ module aa_tree
 
 open util/integer
 
---open util/ordering [Data]
-
---sig Data {}
-
 sig Node {
+	parent: lone Node,
 	level: Int,
 	left: lone Node,
 	right: lone Node,
-	--value: Data
 	value: Int
 } {
 	no left & right
 
-	lone parent: Node | this in parent.(@left + @right)
+	parent = this.~(@left + @right)
 }
 
 fact leavesLevel1 {
@@ -49,12 +45,12 @@ fact nonLeavesHaveChildren {
 	}
 }
 
-fact someRoot {
-	some n: Node | Node in n + n.^(left + right)
+fact connected {
+	one n: Node | no n.parent
 }
 
 fun tree_root: Node {
-	{r: Node | Node in r.*(left + right)}
+	{r: Node | no r.parent}
 }
 
 pred binaryTree[n: Node] {
