@@ -16,7 +16,7 @@ sig Node {
 
 fact leavesLevel1 {
 	all n: Node | {
-		no n.left and no n.right iff n.level = 1 -- TODO: should this be implies?
+		no n.left and no n.right iff n.level = 1
 	}
 }
 
@@ -65,7 +65,6 @@ fact allBinaryTrees {
 pred interesting {
 	some n: Node | n.level > 2
 	some n: Node | n.level = n.right.level
-	--all d: Data | lone n: Node | n.value = d
 }
 
 run {

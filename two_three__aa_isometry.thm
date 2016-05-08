@@ -14,18 +14,13 @@
    <type name="univ"/>
    <type name="aa/Node"/>
    <type name="seq/Int"/>
-   <type name="tt/Leaf"/>
    <type name="tt/Node"/>
-   <type name="tt/TwoThreeNode"/>
-   <set name="$isom_aaNode" type="aa/Node"/>
-   <set name="$isom_n" type="aa/Node"/>
-   <set name="$isom_root" type="tt/Node"/>
-   <set name="$isom_ttNode" type="tt/Node"/>
+   <set name="$interestingIsometric_n" type="tt/Node"/>
 </node>
 
 <edge visible="no" attribute="yes">
-   <relation name="a"> <type name="tt/TwoThreeNode"/> <type name="Int"/> </relation>
-   <relation name="b"> <type name="tt/TwoThreeNode"/> <type name="Int"/> </relation>
+   <relation name="a"> <type name="tt/Node"/> <type name="Int"/> </relation>
+   <relation name="b"> <type name="tt/Node"/> <type name="Int"/> </relation>
    <relation name="level"> <type name="aa/Node"/> <type name="Int"/> </relation>
    <relation name="value"> <type name="aa/Node"/> <type name="Int"/> </relation>
 </edge>

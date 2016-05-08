@@ -17,24 +17,21 @@ fact noValuesReused {
 -- representations with different values, so it's not worth considering them.
 
 fact sameData {
-	tt/TwoThreeNode.(a + b) = aa/Node.value
+	tt/Node.(a + b) = aa/Node.value
 }
 
 -- Splitting our isometry predicate into cases makes it slightly cleaner to read (it started
 -- as a failed attempt into tricking Alloy into allowing more recursion).
 
-pred twoNodeIsom[twoNode: tt/TwoThreeNode, aaNode: aa/Node] {
+pred twoNodeIsom[twoNode: tt/Node, aaNode: aa/Node] {
 	aaNode.right.level != aaNode.level
 	twoNode.a = aaNode.value
 
 	some twoNode.left iff some aaNode.left
 	some twoNode.right iff some aaNode.right
-	
-	--twoNode.left.a = aaNode.left.value
-	--twoNode.right.a = aaNode.right.value
 }
 
-pred threeNodeIsom[threeNode: tt/TwoThreeNode, aaNode: aa/Node] {
+pred threeNodeIsom[threeNode: tt/Node, aaNode: aa/Node] {
 	aaNode.right.level = aaNode.level
 	
 	threeNode.a = aaNode.value
@@ -45,13 +42,13 @@ pred threeNodeIsom[threeNode: tt/TwoThreeNode, aaNode: aa/Node] {
 	some threeNode.right iff some aaNode.right.right
 }
 
-pred isom[ttNode: tt/TwoThreeNode, aaNode: aa/Node] {
+pred isom[ttNode: tt/Node, aaNode: aa/Node] {
 	ttNode.isTwoNode => twoNodeIsom[ttNode, aaNode]
 	ttNode.isThreeNode => threeNodeIsom[ttNode, aaNode]
 }
 
 pred allIsometric {
-	all ttNode: tt/TwoThreeNode | some aaNode: aa/Node | isom[ttNode, aaNode]
+	all ttNode: tt/Node | some aaNode: aa/Node | isom[ttNode, aaNode]
 }
 
 assert isometricInRightPlace {
@@ -107,6 +104,6 @@ check alwaysAllIsometric {
 }
 
 run interestingIsometric {
-	some n: tt/TwoThreeNode | n.isThreeNode
+	some n: tt/Node | n.isThreeNode
 	allIsometric
 } for 10

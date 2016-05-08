@@ -1,19 +1,17 @@
 module two_three_tree
 
-abstract sig Node {
-	parent: lone Node
-} {
-	-- at most one parent
-	parent = this.~(left + right + middle)
-}
-
-sig TwoThreeNode extends Node {
+sig Node {
+	parent: lone Node,
 	a: Int,
 	b: lone Int,
 	left: lone Node,
 	right: lone Node,
 	middle: lone Node
 } {
+	-- at most one parent
+	parent = this.~(@left + @right + @middle)
+
+	-- children are not the same
 	no left & right
 	no left & middle
 	no right & middle
@@ -25,11 +23,8 @@ sig TwoThreeNode extends Node {
 	-- 3-nodes have 2 values
 	some middle iff some b
 
-	some middle => some left
-
 	-- Internal nodes (nodes with children) only have non-leaf children
-	--left in Leaf iff right in Leaf
-	middle in TwoThreeNode => left in TwoThreeNode and right in TwoThreeNode -- can't use iff since middle can be none
+	some middle => some left and some right
 
 	-- Left and right (and middle) are of the same height
 	-- Enforce locally by stating that either both are internal or both are external	
@@ -52,22 +47,20 @@ sig TwoThreeNode extends Node {
 
 }
 
---sig Leaf extends Node {}
-
-pred TwoThreeNode.isTwoNode {
+pred Node.isTwoNode {
 	no this.middle
 }
 
-pred TwoThreeNode.isThreeNode {
+pred Node.isThreeNode {
 	some this.middle
 }
 
-pred TwoThreeNode.isExternal {
-	no this.(left + right + middle)-- in Leaf
+pred Node.isExternal {
+	no this.(left + right + middle)
 }
 
-pred TwoThreeNode.isInternal {
-	this.(left + right + middle) in TwoThreeNode
+pred Node.isInternal {
+	some this.(left + right + middle)
 }
 
 fact acyclic {
@@ -83,8 +76,8 @@ fun tree_root: Node {
 }
 
 run {
-	some n: TwoThreeNode | n.isInternal
-	some n: TwoThreeNode | n.isExternal
-	some n: TwoThreeNode | n.isTwoNode
-	some n: TwoThreeNode | n.isThreeNode
+	some n: Node | n.isInternal
+	some n: Node | n.isExternal
+	some n: Node | n.isTwoNode
+	some n: Node | n.isThreeNode
 } for 9 but 3 int
