@@ -1,3 +1,4 @@
+
 enum Color {BLACK, RED}
 
 one sig rbt {

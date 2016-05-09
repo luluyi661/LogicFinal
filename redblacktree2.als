@@ -1,3 +1,4 @@
+
 enum Color {BLACK, RED}
 
 one sig rbt {
@@ -5,6 +6,7 @@ one sig rbt {
 }
 
 sig rbtNode {
+	num: Int,
 	left: lone rbtNode,
   	right: lone rbtNode,
 	color: one Color,
@@ -30,6 +32,13 @@ fact btree {
 	no left & right
 }
 
+fact orderedTree {       
+    all n: rbtNode | {
+      (all l: n.left.*(left + right) | n.num > l.num) and
+      (all r: n.right.*(left + right) | n.num < r.num)
+	}
+}
+
 fact redNodeHasTwoBlackChildren {
 	all n: rbtNode | {
 		(n.color = RED and some n.left) => n.left.color = BLACK
@@ -46,6 +55,7 @@ fact blackHeightIsSameToAllPaths {
 
 pred show {
 	-- can add constraints to see different variations of trees here
+	all d: rbtNode.num | d > 0
 }
 
-run show for 5
+run show for exactly 5 rbtNode

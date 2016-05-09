@@ -1,4 +1,5 @@
-open redblacktree as RBT
+open redblacktree as RBT1
+open redblacktree2 as RBT2
 
 abstract sig Node {
 }
@@ -138,28 +139,107 @@ fact orderedTree {
 	}
 }
 
-pred show {
-	add[#threeNode, mul[2, #fourNode]] = #{n : RBT/rbtNode | n.color = RED}
-	add[add[#twoNode, mul[2, #threeNode]], mul[3, #fourNode]] = #RBT/rbtNode
-	add[add[#twoNode, #threeNode], #fourNode] = #{n : RBT/rbtNode | n.color = BLACK}
+pred link {
+	add[#threeNode, mul[2, #fourNode]] = #{n : RBT1/rbtNode | n.color = RED}
+	add[add[#twoNode, mul[2, #threeNode]], mul[3, #fourNode]] = #RBT1/rbtNode
+	add[add[#twoNode, #threeNode], #fourNode] = #{n : RBT1/rbtNode | n.color = BLACK}
+
+	add[#threeNode, mul[2, #fourNode]] = #{n : RBT2/rbtNode | n.color = RED}
+	add[add[#twoNode, mul[2, #threeNode]], mul[3, #fourNode]] = #RBT2/rbtNode
+	add[add[#twoNode, #threeNode], #fourNode] = #{n : RBT2/rbtNode | n.color = BLACK}
 	all n: twoNode | {
-		some rbt : RBT/rbtNode | {
+		// rbt tree 1
+		some rbt : RBT1/rbtNode | {
+			rbt.num = n.num2
+			some rbt.left => rbt.left.color = BLACK
+			some rbt.right => rbt.right.color = BLACK
+		}
+		// rbt tree 2
+		some rbt : RBT2/rbtNode | {
 			rbt.num = n.num2
 			some rbt.left => rbt.left.color = BLACK
 			some rbt.right => rbt.right.color = BLACK
 		}
 	}
-	all n: threeNode | {
-		some rbt1 : RBT/rbtNode | rbt1.num = n.num3_left
-		some rbt2: RBT/rbtNode | rbt2.num = n.num3_right
-	}
-	all n: fourNode | {
-		some rbt1 : RBT/rbtNode | rbt1.num = n.num4_left and rbt1.color = RED
-		some rbt2: RBT/rbtNode | rbt2.num = n.num4_mid
-		some rbt3: RBT/rbtNode | rbt3.num = n.num4_right and rbt3.color = RED
-	}
-	#twoNode > 0
 	
+	all n: fourNode | {
+		//rbt tree 1
+		some rbt1 : RBT1/rbtNode | rbt1.num = n.num4_left and rbt1.color = RED
+		some rbt2: RBT1/rbtNode | rbt2.num = n.num4_mid
+		some rbt3: RBT1/rbtNode | rbt3.num = n.num4_right and rbt3.color = RED
+		//rbt tree 2
+		some rbt1 : RBT2/rbtNode | rbt1.num = n.num4_left and rbt1.color = RED
+		some rbt2: RBT2/rbtNode | rbt2.num = n.num4_mid
+		some rbt3: RBT2/rbtNode | rbt3.num = n.num4_right and rbt3.color = RED
+	}
+	#threeNode > 0
 }
 
-run show for 6
+--find me all different trees
+pred existsDiffCorres {
+	link
+	--general constrain for three node
+	all n: threeNode | {
+		// rbt tree 1
+		some rbt1 : RBT1/rbtNode | rbt1.num = n.num3_left
+		some rbt2: RBT1/rbtNode | rbt2.num = n.num3_right
+		// rbt tree 2
+		some rbt1 : RBT2/rbtNode | rbt1.num = n.num3_left
+		some rbt2: RBT2/rbtNode | rbt2.num = n.num3_right		
+	}
+
+	some rbt1 : RBT1/rbtNode, rbt2 : RBT2/rbtNode | {
+		rbt1.num = rbt2.num 
+		((some rbt1.left and no rbt2.left) or
+		(some rbt1.right and no rbt2.right) or
+		(some rbt1.left and some rbt2.left and rbt1.left.num != rbt2.left.num) or
+		(some rbt1.left and some rbt2.left and rbt1.right.num != rbt2.right.num) or
+		(rbt1.color = RED and rbt2.color = BLACK) or
+		(rbt1.color = BLACK and rbt2.color = RED)
+		)	
+	}
+}
+
+
+--should find no instance
+pred showLeftLeanCorres {
+	link
+	--left-lean constraint
+	all n: threeNode | {
+		// rbt tree 1
+		some rbt1 : RBT1/rbtNode | rbt1.num = n.num3_left and rbt1.color = RED
+		some rbt2: RBT1/rbtNode | rbt2.num = n.num3_right
+		// rbt tree 2
+		some rbt1 : RBT2/rbtNode | rbt1.num = n.num3_left and rbt1.color = RED
+		some rbt2: RBT2/rbtNode | rbt2.num = n.num3_right		
+	}
+}
+
+--should find no instance
+pred leftLeanNoDiffCorres {
+	link
+	--left-lean constraint
+	all n: threeNode | {
+		// rbt tree 1
+		some rbt1 : RBT1/rbtNode | rbt1.num = n.num3_left and rbt1.color = RED
+		some rbt2: RBT1/rbtNode | rbt2.num = n.num3_right
+		// rbt tree 2
+		some rbt1 : RBT2/rbtNode | rbt1.num = n.num3_left and rbt1.color = RED
+		some rbt2: RBT2/rbtNode | rbt2.num = n.num3_right		
+	}
+	some rbt1 : RBT1/rbtNode, rbt2 : RBT2/rbtNode | {
+		rbt1.num = rbt2.num 
+		((some rbt1.left and no rbt2.left) or
+		(some rbt1.right and no rbt2.right) or
+		(some rbt1.left and some rbt2.left and rbt1.left.num != rbt2.left.num) or
+		(some rbt1.left and some rbt2.left and rbt1.right.num != rbt2.right.num) or
+		(rbt1.color = RED and rbt2.color = BLACK) or
+		(rbt1.color = BLACK and rbt2.color = RED)
+		)	
+	}
+}
+
+run link for 6 -- general results
+run existsDiffCorres for 6 -- find different correspondence
+run showLeftLeanCorres for 6 -- show LLRBT corres works
+run leftLeanNoDiffCorres for 6 -- no different correspondence for LLRBT

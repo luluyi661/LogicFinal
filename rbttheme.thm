@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<alloy>
+
+<view>
+
+<defaultnode/>
+
+<defaultedge/>
+
+<node>
+   <type name="fourNode"/>
+   <type name="Int"/>
+   <type name="Node"/>
+   <type name="String"/>
+   <type name="threeNode"/>
+   <type name="twoNode"/>
+   <type name="univ"/>
+   <type name="RBT1/BLACK"/>
+   <type name="RBT1/rbtNode"/>
+   <type name="RBT1/RED"/>
+   <type name="RBT2/BLACK"/>
+   <type name="RBT2/rbtNode"/>
+   <type name="RBT2/RED"/>
+   <type name="seq/Int"/>
+   <type name="RBT1/ordering/Ord"/>
+   <type name="RBT2/ordering/Ord"/>
+   <set name="$showLeftLeanCorres_r" type="Node"/>
+</node>
+
+<node visible="no">
+   <type name="RBT1/Color"/>
+   <type name="RBT1/rbt"/>
+   <type name="RBT2/Color"/>
+   <type name="RBT2/rbt"/>
+</node>
+
+<edge visible="no">
+   <relation name="$link_rbt"> <type name="twoNode"/> <type name="RBT1/rbtNode"/> </relation>
+   <relation name="$link_rbt&apos;"> <type name="twoNode"/> <type name="RBT2/rbtNode"/> </relation>
+   <relation name="$showLeftLeanCorres_rbt1"> <type name="threeNode"/> <type name="RBT1/rbtNode"/> </relation>
+   <relation name="$showLeftLeanCorres_rbt1&apos;"> <type name="threeNode"/> <type name="RBT2/rbtNode"/> </relation>
+   <relation name="$showLeftLeanCorres_rbt2"> <type name="threeNode"/> <type name="RBT1/rbtNode"/> </relation>
+   <relation name="$showLeftLeanCorres_rbt2&apos;"> <type name="threeNode"/> <type name="RBT2/rbtNode"/> </relation>
+   <relation name="children"> <type name="RBT1/rbt"/> <type name="RBT1/rbtNode"/> </relation>
+   <relation name="children"> <type name="RBT2/rbt"/> <type name="RBT2/rbtNode"/> </relation>
+</edge>
+
+<edge visible="no" attribute="yes">
+   <relation name="color"> <type name="RBT1/rbtNode"/> <type name="RBT1/Color"/> </relation>
+   <relation name="color"> <type name="RBT2/rbtNode"/> <type name="RBT2/Color"/> </relation>
+   <relation name="num"> <type name="RBT1/rbtNode"/> <type name="Int"/> </relation>
+   <relation name="num"> <type name="RBT2/rbtNode"/> <type name="Int"/> </relation>
+   <relation name="num2"> <type name="twoNode"/> <type name="Int"/> </relation>
+   <relation name="num3_left"> <type name="threeNode"/> <type name="Int"/> </relation>
+   <relation name="num3_right"> <type name="threeNode"/> <type name="Int"/> </relation>
+   <relation name="num4_left"> <type name="fourNode"/> <type name="Int"/> </relation>
+   <relation name="num4_mid"> <type name="fourNode"/> <type name="Int"/> </relation>
+   <relation name="num4_right"> <type name="fourNode"/> <type name="Int"/> </relation>
+</edge>
+
+</view>
+
+</alloy>
