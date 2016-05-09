@@ -14,9 +14,18 @@ sig Node {
 	parent = this.~(@left + @right)
 }
 
+pred Node.hasHorizontalLink {
+	this.level = this.right.level
+}
+
+-- Makes things a bit easier to work through visually
+fact noDuplicateValues {
+	all disj n1, n2: Node | n1.value != n2.value
+}
+
 fact leavesLevel1 {
 	all n: Node | {
-		no n.left and no n.right iff n.level = 1
+		no n.left and no n.right => n.level = 1
 	}
 }
 
@@ -53,9 +62,10 @@ fun tree_root: Node {
 	{r: Node | no r.parent}
 }
 
+-- This would normally be a consequence of insertion, which we're not modeling.
 pred binaryTree[n: Node] {
-	all e: n.^left.value | n.value.gt[e]
-	all e: n.^right.value | n.value.lte[e]
+	all e: n.left.*(left + right).value | n.value > e
+	all e: n.right.*(left + right).value | n.value < e
 }
 
 fact allBinaryTrees {
@@ -64,10 +74,22 @@ fact allBinaryTrees {
 
 pred interesting {
 	some n: Node | n.level > 2
-	some n: Node | n.level = n.right.level
+	some n: Node | n.hasHorizontalLink
 }
 
-run {
-	all n: Node | binaryTree[n]
-	interesting
-} for 10 but 5 int
+-- The other invariants are sig facts on Node needed to maintain / define structure.
+
+check noLeftRedNodes {
+	-- Horizontal links in AA trees are analagous to red links in red-black trees,
+	-- and are only allowed to right children. 
+	no n: Node | n.left.level = n.level
+}
+
+
+check noConsecutiveHorizontalLinks {
+	-- This ought to be a consequence of the rightGrandchildLevelLess fact, but
+	-- this assertion is to verify it in a more intuitive format.
+	no n: Node | n.hasHorizontalLink and n.right.hasHorizontalLink
+}
+
+run interesting for 8
